@@ -145,6 +145,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
         RNCWebView reactWebView = (RNCWebView) webView;
 
         reactWebView.callInjectedJavaScript();
+        reactWebView.linkBridge();
 
         emitFinishEvent(webView, url);
       }
@@ -218,7 +219,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
       event.putBoolean("canGoForward", webView.canGoForward());
       //get webview height
       event.putDouble("height", webView.getContentHeight());
-      
+
       return event;
     }
 
@@ -331,6 +332,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
 
       if (enabled) {
         addJavascriptInterface(createRNCWebViewBridge(this), JAVASCRIPT_INTERFACE);
+        linkBridge();
       } else {
         removeJavascriptInterface(JAVASCRIPT_INTERFACE);
       }
@@ -376,7 +378,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
         evaluateJavascriptWithFallback("(" +
           "window.originalPostMessage = window.postMessage," +
           "window.postMessage = function(data) {" +
-            BRIDGE_NAME + ".postMessage(String(data));" +
+            JAVASCRIPT_INTERFACE + ".postMessage(String(data));" +
           "}" +
         ")");
       }
@@ -577,7 +579,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
   public void setShowsVerticalScrollIndicator(WebView view, boolean enabled) {
     view.setVerticalScrollBarEnabled(enabled);
   }
-  
+
   @ReactProp(name = "cacheEnabled")
   public void setCacheEnabled(WebView view, boolean enabled) {
     if (enabled) {
