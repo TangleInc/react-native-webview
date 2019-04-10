@@ -656,7 +656,7 @@ static NSURLCredential* clientAuthenticationCredential;
           "window.webkit.messageHandlers.%@.postMessage(String(data));"
         "};"
       "})();",
-      MessageHanderName
+      MessageHandlerName
     ];
     [self evaluateJS: source thenCall: nil];
   }
